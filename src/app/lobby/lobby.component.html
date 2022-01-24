@@ -1,0 +1,12 @@
+<div class='top'>
+<h1>Game ID: {{gameId}}</h1>
+</div>
+<div class='content'>
+<h2>In Lobby:</h2>
+<ul>
+<li *ngFor="let player of players">
+  {{player}}
+</li>
+</ul>
+<p>{{status}}</p>
+</div>

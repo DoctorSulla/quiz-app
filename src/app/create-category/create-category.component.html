@@ -1,0 +1,16 @@
+<div class='top'>
+  <h1>Create Category</h1>
+</div>
+<div class='content'>
+  <form (submit)='addQuestion()'>
+    <input type='text' id='category' name='category' placeholder='Category' [(ngModel)]='category.category'><br><br>
+    <input type='text' id='question' name='question' placeholder='Question' [(ngModel)]='question.question'><br><br>
+    <input type='text' id='correct-answer' name='correct-answer' placeholder='Correct Answer' [(ngModel)]='question.correctAnswer'><br>
+    <input type='text' id='other-answer-one' name='other-answer-one' placeholder='Other Answer' [(ngModel)]='question.otherAnswers[0]'><br>
+    <input type='text' id='other-answer-two' name='other-answer-two' placeholder='Other Answer' [(ngModel)]='question.otherAnswers[1]'><br>
+    <input type='text' id='other-answer-three' name='other-answer-three' placeholder='Other Answer' [(ngModel)]='question.otherAnswers[2]'><br><br>
+    <button type='submit'>Add Question</button>
+  </form>
+
+  {{category | json}}
+</div>

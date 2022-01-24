@@ -1,0 +1,16 @@
+<section class='top'>
+<h1>Welcome to QuizApp</h1>
+</section>
+<section class='content'>
+<h2>Enter a username to continue:</h2>
+<form (submit)="processLogin()">
+<label for='username'>Username:</label> <input placeholder='Username' type='text' name='username' id='username' [(ngModel)]='username'>
+<button type='submit'>Continue</button>
+</form>
+<div class='form-error'>
+  {{formError}}
+</div>
+</section>
+<section class='bottom'>
+QuizApp is inspired by the original and now discontinued QuizUp
+</section>

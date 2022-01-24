@@ -1,0 +1,16 @@
+<section class='top'>
+<h1>Welcome {{username}}</h1>
+</section>
+<section class='content'>
+<h2>Categories:</h2>
+<ul>
+<li class='category' *ngFor='let category of categories' (click)="startGame(category,username)">
+  {{category}}
+</li>
+</ul>
+<h2>Join a Game:</h2>
+<form (submit)='joinGame()'>
+  <input (keyup)='validate()' type='text' name='game-id' id='game-id' pattern="[A-Z0-9]{6}" placeholder='Game ID' required [(ngModel)]='gameId'> <button type='submit'>Join Game</button>
+</form>
+<div class='form-error'>{{joinError}}</div>
+</section>

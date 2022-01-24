@@ -1,0 +1,14 @@
+{
+  "name": "QuizApp",
+  "short_name": "QuizApp",
+  "start_url": "../index.html",
+  "display": "fullscreen",
+  "theme_color": "#3F72AF",
+  "background_color": "#3F72AF",
+  "description": "A Quiz Game inspired by QuizUp",
+  "icons":[
+    {"src": "homescreen192.png",
+    "sizes": "192x192",
+    "type": "image/png"}
+  ]
+}

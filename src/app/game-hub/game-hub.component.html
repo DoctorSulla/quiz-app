@@ -1,0 +1,18 @@
+<div *ngIf="!gameFinished">
+<div class='content'>
+<div class='scores'>{{localGameState.players[0]}} <span class='p1-score'>{{localGameState.scores[0]}}</span> vs <span class='p2-score'>{{localGameState.scores[1]}}</span> {{localGameState.players[1]}}</div>
+<h3>{{localGameState.activeQuestion+1}}. {{localGameState.question}}</h3>
+<div class='options'>
+  <ng-container *ngFor="let answer of localGameState.answers"><div (click)="answerQuestion(username,'ANSWER',gameId,answer,$event)" [ngClass]="{'correct': answer == correctAnswer }" class='option'>{{answer}}</div></ng-container>
+</div>
+<progress id="file" max="{{maxTime}}" value="{{elapsedTime}}"></progress>
+</div>
+</div>
+<div *ngIf="gameFinished">
+<div class='top'>
+  <h1>{{result}}</h1>
+</div>
+<div class='content'>
+<div class='final-scores'>{{localGameState.players[0]}} <span class='p1-score'>{{localGameState.scores[0]}}</span> vs <span class='p2-score'>{{localGameState.scores[1]}}</span> {{localGameState.players[1]}}</div>
+<a class='navigation' routerLink="/home">HOME</a>
+</div>
