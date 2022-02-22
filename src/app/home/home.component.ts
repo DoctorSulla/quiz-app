@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit {
   constructor(private router: Router,private dataService: DataService) { }
 
   categories: Array<string> = [];
-  username: string = localStorage.getItem('username');
+  username: string = this.dataService.readToken().username;
   gameId: string = "";
   joinError = "";
 
@@ -28,8 +28,7 @@ export class HomeComponent implements OnInit {
   async startGame(category:string,username:string) {
       let request : NewGameRequest = {"playerOne":username,"category":category};
       let response = await this.dataService.createGame(request);
-      localStorage.setItem('activeGame',response.id);
-      this.router.navigate(['/lobby']);
+      this.router.navigate(['/lobby',response.id]);
   }
 
   async joinGame() {
@@ -40,14 +39,12 @@ export class HomeComponent implements OnInit {
     }
     else {
       this.joinError = "";
-      localStorage.setItem('activeGame',response.id);
-      this.router.navigate(['/lobby']);
+      this.router.navigate(['/lobby',response.id]);
     }
   }
 
-
   ngOnInit(): void {
-    if(localStorage.getItem('username') == null || !localStorage.getItem('username').match(/[a-zA-Z0-9]{3,20}/)) {
+    if(localStorage.getItem('jwt') == null) {
       this.router.navigate(['/login']);
     }
     localStorage.removeItem('activeGame');

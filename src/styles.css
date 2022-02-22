@@ -1,5 +1,5 @@
 body { margin:0; padding:0}
-main { width:100%; max-width:1000px; margin:auto; font-family:arial; background-color:#F9F7F7; height:fit-content; min-height:100vh }
+main { width:100%; max-width:1000px; margin:auto; font-family:arial; background-color:var(--main-bg-colour); height:fit-content; min-height:100vh }
 .form-error { color:#112D4E; padding:10px 0; font-weight:bold; width:fit-content; }
 h1,h2,h3,h4,h5,h6 { margin:0; padding:0;}
 h1 { color:white; font-size:24px }
@@ -7,9 +7,18 @@ h2 { color:black; font-size:20px }
 li, input, button { font-size:16px}
 
 
-.top { background-color: #3F72AF; padding:10px}
-.bottom { background-color:#3F72AF; padding:10px; color:white; font-style:italic; }
-.content { background-color:#DBE2EF; padding:10px }
+.top { background-color: var(--top-bg-colour); padding:10px}
+.bottom { background-color:var(--bottom-bg-colour); padding:10px; color:var(--text-colour); font-style:italic; }
+.content { background-color:var(--content-bg-colour); padding:10px }
 input { background-color:#F9F7F7; border:1px solid black }
-button { color:white; background-color:#3F72AF; border-radius:5px; }
+button { color:var(--text-colour); background-color:var(--button-bg-colour); border-radius:5px; }
 form { padding:10px 0}
+
+:root {
+  --main-bg-colour : #F9F7F7;
+  --top-bg-colour :  #3F72AF;
+  --bottom-bg-colour: #3F72AF;
+  --content-bg-colour: #DBE2EF;
+  --text-colour: #FFFFFF;
+  --button-bg-colour: #3F72AF
+}

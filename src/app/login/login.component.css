@@ -1,2 +1,18 @@
 label { display:none }
-button { margin-left:5px }
+button { margin:0 5px }
+input { display:block; margin:10px 5px }
+h3 { margin-left:5px; margin-top:10px}
+#credentials-container { width:60%; background-color:white; padding-top:0; margin:auto; min-height:300px; border-radius:10px; border:1px solid black }
+.tab {
+  color:#000000;
+  background-color:#DBE2EF;
+  border-bottom:1px solid black;
+  width:calc(50% - 10px);
+  display:inline-block;
+  cursor:pointer;
+  text-align:center;
+  padding:5px;
+  position:relative;
+}
+.active { background-color:#3F72AF; color:#FFFFFF; }
+.form-error { margin-left:5px }

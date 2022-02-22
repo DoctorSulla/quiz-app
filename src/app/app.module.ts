@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -9,6 +10,7 @@ import { LoginComponent } from './login/login.component';
 import { GameHubComponent } from './game-hub/game-hub.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { CreateCategoryComponent } from './create-category/create-category.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
 
 @NgModule({
   declarations: [
@@ -17,12 +19,14 @@ import { CreateCategoryComponent } from './create-category/create-category.compo
     LoginComponent,
     GameHubComponent,
     LobbyComponent,
-    CreateCategoryComponent
+    CreateCategoryComponent,
+    VerifyEmailComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -3,6 +3,7 @@ import { DataService } from '../data.service';
 import { FetchGameRequest } from '../interfaces/fetch-game-request';
 import { AnswerQuestionRequest } from '../interfaces/answer-question-request';
 import { LocalGameState } from '../interfaces/local-game-state';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-game-hub',
@@ -11,7 +12,7 @@ import { LocalGameState } from '../interfaces/local-game-state';
 })
 export class GameHubComponent implements OnInit {
 
-  constructor(private dataService:DataService) { }
+  constructor(private dataService:DataService,private route:ActivatedRoute) { }
   elapsedTime:number = 0;
   maxTime: number = 1000;
   stepSize: number = 1;
@@ -22,10 +23,13 @@ export class GameHubComponent implements OnInit {
   gameFinished = false;
   correctAnswer: string;
 
-  gameId: string = localStorage.getItem('activeGame');
-  username: string = localStorage.getItem('username');
+
+  username: string = this.dataService.readToken().username;
   player: number;
   result: string;
+
+  gameId: string;
+  private sub: any;
 
   localGameState: LocalGameState = {"activeQuestion":0,"question":"","answers":[],"scores":[],"players":[]}
 
@@ -122,10 +126,14 @@ export class GameHubComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Get the game ID from the route parameter
+    this.sub = this.route.params.subscribe(params => {
+    this.gameId = params['gameId'];
     // Fetch the first question
     let activeQuestion = parseInt(localStorage.getItem('activeQuestion'));
     this.localGameState.activeQuestion = activeQuestion;
     this.getGame(this.username,this.gameId,'true');
+    });
   }
 
 }

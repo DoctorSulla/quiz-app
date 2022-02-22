@@ -1,15 +1,31 @@
 <section class='top'>
-<h1>Welcome to QuizApp</h1>
+  <h1>Welcome to QuizApp</h1>
 </section>
 <section class='content'>
-<h2>Enter a username to continue:</h2>
-<form (submit)="processLogin()">
-<label for='username'>Username:</label> <input placeholder='Username' type='text' name='username' id='username' [(ngModel)]='username'>
-<button type='submit'>Continue</button>
-</form>
-<div class='form-error'>
-  {{formError}}
-</div>
+  <div id="credentials-container">
+      <div style='border-top-left-radius:10px' (click)="changeActive(true)" class='tab' [class.active]= "activeTab">Login</div>
+      <div style='border-top-right-radius:10px' (click)="changeActive(false)" class='tab' [class.active]= "!activeTab">Register</div>
+
+    <div [@switchForms]="activeTab ? 'visible' : 'invisible'" (@switchForms.start)="toggleForms($event)" id='form-container'>
+        <form *ngIf="pageState == 'Login'" (submit)="processLogin(login)">
+        <label for='username'>Email:</label> <input  autocomplete='username' placeholder='Username' type='text' name='username' id='username' [(ngModel)]='login.email'>
+        <label for='password'>Password:</label> <input  autocomplete='current-password'  placeholder='Password' type='password' name='password' id='password' [(ngModel)]='login.password'>
+        <button type='submit'>Login</button>
+      </form>
+
+      <form *ngIf="pageState == 'Register'" (submit)="processRegistration(register)">
+        <label for='email'>Email:</label> <input  autocomplete='email' placeholder='Email' type='email' name='email' id='email' [(ngModel)]='register.email'>
+        <label for='username'>Username:</label> <input  autocomplete='username' placeholder='Username' type='text' name='username' id='username' [(ngModel)]='register.username'>
+        <label for='password'>Password:</label> <input autocomplete='new-password' placeholder='Password' type='password' name='password' id='password' [(ngModel)]='register.password'>
+        <label for='confirmPassword'>Confirm Password:</label> <input autocomplete='new-password' placeholder='Confirm Password' type='password' name='confirmPassword' id='confirmPassword' [(ngModel)]='register.confirmPassword'>
+        <button type='submit'>Register</button>
+      </form>
+
+      <div class='form-error'>
+        {{formError}}
+      </div>
+    </div>
+  </div>
 </section>
 <section class='bottom'>
 QuizApp is inspired by the original and now discontinued QuizUp

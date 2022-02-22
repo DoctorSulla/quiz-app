@@ -10,10 +10,11 @@ import { CreateCategoryComponent } from './create-category/create-category.compo
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'home', component: HomeComponent },
-  { path: 'game', component: GameHubComponent },
-  { path: 'lobby', component: LobbyComponent },
+  { path: 'game/:gameId', component: GameHubComponent },
+  { path: 'lobby/:gameId', component: LobbyComponent },
   { path: 'new-category', component: CreateCategoryComponent },
-  { path: '', redirectTo: '/login', pathMatch: 'full' }
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '**', redirectTo: '/login', pathMatch: 'full' }
 ];
 
 @NgModule({

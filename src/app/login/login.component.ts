@@ -2,35 +2,68 @@ import { Component, OnInit } from '@angular/core';
 import { LoginRequest } from '../interfaces/login-request';
 import { RegistrationRequest } from '../interfaces/registration-request';
 import { Router } from '@angular/router';
+import { LoginComponentAnimation } from '../animations/animations';
+import { DataService } from '../data.service';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  animations: [LoginComponentAnimation]
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private router: Router) { }
+
+  constructor(private router: Router,private dataService: DataService) { }
 
   username: string = "";
   formError: string = "";
 
-  login : LoginRequest;
-  register: RegistrationRequest;
+  login : LoginRequest = {"email":"","password":""};
+  register: RegistrationRequest = {"username":"","email":"","password":"","confirmPassword":""};
+
+  pageState : string = "Login";
+  activeTab: boolean = true;
 
 
-  processLogin() :void {
-      if(this.username.match(/[a-zA-Z0-9]{3,20}/)) {
-        this.router.navigate(['/home']);
-        localStorage.setItem('username',this.username);
-      }
-      else {
-        this.formError = "Username must be an alphanumeric character between 3 and 20 characters.";
-      }
+  async processLogin(loginRequest: LoginRequest) {
+    let response = await this.dataService.createSession(loginRequest);
+    if('error' in response && response.error == true) {
+      this.formError = response.message;
+    }
+    else {
+      localStorage.setItem('jwt',response.jwt);
+      this.router.navigate(['/home']);
+    }
+  }
+
+  async processRegistration(registrationRequest: RegistrationRequest) {
+    let response = await this.dataService.register(registrationRequest);
+    if('error' in response && response.error == true) {
+      this.formError = response.message;
+    }
+    else {
+      localStorage.setItem('jwt',response.jwt);
+      this.router.navigate(['/home']);
+    }
+  }
+
+  changeActive(status: boolean) :void {
+    this.activeTab = status;
+  }
+
+  toggleForms($event) :void {
+    if($event.fromState == 'void') {
+
+    }
+    else {
+      this.formError = "";
+      setTimeout(()=> { if(this.pageState == 'Login') { this.pageState = 'Register'; } else { this.pageState = 'Login' }},600)
+    }
   }
 
   ngOnInit(): void {
-    if(localStorage.getItem('username') != null) {
+    if(localStorage.getItem('jwt') != null) {
       this.router.navigate(['/home']);
     };
   }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
 import { FetchGameRequest } from '../interfaces/fetch-game-request';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-lobby',
@@ -10,15 +10,18 @@ import { Router } from '@angular/router';
 })
 export class LobbyComponent implements OnInit {
 
-  constructor(private router: Router,private dataService: DataService) { }
+  constructor(private router: Router,private dataService: DataService, private route: ActivatedRoute) { }
 
-  gameId: string = localStorage.getItem('activeGame');
-  username: string = localStorage.getItem('username');
+  gameId: string;
+  username: string = this.dataService.readToken().username;
   queryLimit: number = 100;
   queries: number = 0;
   queryGame : ReturnType<typeof setInterval>;
   players : Array<string>;
   status : string = "Waiting for players..."
+  countdown: number = 3;
+
+  private sub: any;
 
   async getGame(username: string,gameId: string,retrieveQuestions: string) {
     if(this.queries >= this.queryLimit) {
@@ -30,20 +33,24 @@ export class LobbyComponent implements OnInit {
     let response = await this.dataService.getGame(fetchGameRequest);
     this.players = response.players;
     if(this.players.length > 1) {
-      this.status = "Starting game in 3 seconds..."
+      this.status = "Starting game in " + this.countdown + " seconds...";
+      setInterval(()=> {
+        if(this.countdown > 0) { this.countdown--; }
+        this.status = "Starting game in " + this.countdown + " seconds..."
+      },1000)
       clearInterval(this.queryGame);
-      setTimeout(() => { this.router.navigate(['/game']) },3000);
+      setTimeout(() => { this.router.navigate(['/game',this.gameId]) },3000);
     }
   }
 
 
   ngOnInit(): void {
-    if(localStorage.getItem('activeGame') == null) {
-      this.router.navigate(['/home']);
-    }
+    // Get the game ID from the route parameter
+    this.sub = this.route.params.subscribe(params => {
+    this.gameId = params['gameId'];
     this.getGame(this.username,this.gameId,'false');
     this.queryGame = setInterval(() => { this.getGame(this.username,this.gameId,'false')},2000);
-    localStorage.clearItem('activeQuestion');
+  })
   }
 
 }
