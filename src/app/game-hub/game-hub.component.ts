@@ -3,7 +3,7 @@ import { DataService } from '../data.service';
 import { FetchGameRequest } from '../interfaces/fetch-game-request';
 import { AnswerQuestionRequest } from '../interfaces/answer-question-request';
 import { LocalGameState } from '../interfaces/local-game-state';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-game-hub',
@@ -12,7 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class GameHubComponent implements OnInit {
 
-  constructor(private dataService:DataService,private route:ActivatedRoute) { }
+  constructor(private dataService:DataService,private route:ActivatedRoute,private router: Router) { }
   elapsedTime:number = 0;
   maxTime: number = 1000;
   stepSize: number = 1;
@@ -33,9 +33,9 @@ export class GameHubComponent implements OnInit {
 
   localGameState: LocalGameState = {"activeQuestion":0,"question":"","answers":[],"scores":[],"players":[]}
 
-  async getGame(username: string,gameId: string,retrieveQuestions: string) {
+  async getGame(gameId: string,retrieveQuestions: string) {
     // Get the game
-    let fetchGameRequest : FetchGameRequest = {"player":username,"gameId":gameId,"retrieveQuestions":retrieveQuestions};
+    let fetchGameRequest : FetchGameRequest = {"gameId":gameId,"retrieveQuestions":retrieveQuestions};
     let response = await this.dataService.getGame(fetchGameRequest);
     // If the active question has increased the other player has answered
     if(response.activeQuestion > this.localGameState.activeQuestion) {
@@ -43,7 +43,7 @@ export class GameHubComponent implements OnInit {
       this.localGameState.activeQuestion = response.activeQuestion;
       // Store in case page is refreshed
       localStorage.setItem('activeQuestion',String(this.localGameState.activeQuestion));
-      this.getGame(this.username,this.gameId,'true');
+      this.getGame(this.gameId,'true');
     }
     if(response.gameStatus == 'Finished') {
       this.endGame(response);
@@ -51,6 +51,13 @@ export class GameHubComponent implements OnInit {
     // Populate the local game state
     this.localGameState.scores = response.scores;
     this.localGameState.players = response.players;
+
+    if(this.localGameState.players[0] == this.username) {
+      this.player = 1;
+    }
+    else {
+      this.player = 2;
+    }
 
     // If function is called trying to retrieve a question then update the game state and reset the timer
     if(retrieveQuestions == "true") {
@@ -67,12 +74,7 @@ export class GameHubComponent implements OnInit {
     this.gameFinished = true;
     this.localGameState.scores = response.scores;
     this.localGameState.players = response.players;
-    if(this.localGameState.players[0] == this.username) {
-      this.player = 1;
-    }
-    else {
-      this.player = 2;
-    }
+
     if(this.localGameState.scores[0] == this.localGameState.scores[1]) {
       this.result = "Draw";
     }
@@ -88,12 +90,12 @@ export class GameHubComponent implements OnInit {
     clearInterval(this.queryGame);
   }
 
-  async answerQuestion(player:string,action:string,gameId:string,answer:string,$event) {
+  async answerQuestion(action:string,gameId:string,answer:string,$event) {
     if(this.answeredCurrent) {
       return false;
     }
     this.answeredCurrent = true;
-    let answerQuestionRequest : AnswerQuestionRequest = {"player":player,"action":action,"gameId":gameId,"answer":answer};
+    let answerQuestionRequest : AnswerQuestionRequest = {"action":action,"gameId":gameId,"answer":answer};
     let response = await this.dataService.answerQuestion(answerQuestionRequest);
     if(typeof response.scores != 'undefined') {
       this.localGameState.scores = response.scores;
@@ -103,12 +105,12 @@ export class GameHubComponent implements OnInit {
     }
     clearInterval(this.clientTimer);
     if(response.correct && $event != null) {
-      $event.srcElement.style.backgroundColor = 'green';
+      $event.target.style.backgroundColor = 'green';
     }
     else if(!response.correct && $event != null) {
-      $event.srcElement.style.backgroundColor = 'red';
+      $event.target.style.backgroundColor = 'red';
     }
-    this.queryGame = setInterval(()=> { this.getGame(this.username,this.gameId,'false')},3000);
+    this.queryGame = setInterval(()=> { this.getGame(this.gameId,'false')},3000);
   }
 
   increaseTime() {
@@ -116,7 +118,7 @@ export class GameHubComponent implements OnInit {
       this.elapsedTime = this.elapsedTime + this.stepSize;
     }
     else {
-      this.answerQuestion(this.username,'ANSWER',this.gameId,'void',null);
+      this.answerQuestion('ANSWER',this.gameId,'void',null);
       clearInterval(this.clientTimer);
     }
   }
@@ -126,13 +128,18 @@ export class GameHubComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.dataService.validateToken().then(response => {
+      if(!response) {
+        this.router.navigate(['/login']);
+      }
+    })
     // Get the game ID from the route parameter
     this.sub = this.route.params.subscribe(params => {
     this.gameId = params['gameId'];
     // Fetch the first question
     let activeQuestion = parseInt(localStorage.getItem('activeQuestion'));
     this.localGameState.activeQuestion = activeQuestion;
-    this.getGame(this.username,this.gameId,'true');
+    this.getGame(this.gameId,'true');
     });
   }
 

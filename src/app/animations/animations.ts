@@ -7,7 +7,7 @@ import {
 
 export const LoginComponentAnimation = trigger('switchForms',[
         transition('visible <=> invisible', [
-          animate('600ms 0ms ease-out',style({ opacity:0 })),
-          animate('600ms 0ms ease-in',style({opacity:1 })),
+          animate('400ms 0ms ease-out',style({ opacity:0 })),
+          animate('400ms 0ms ease-in',style({opacity:1 })),
         ])
       ])

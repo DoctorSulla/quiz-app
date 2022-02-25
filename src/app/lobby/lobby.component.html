@@ -8,5 +8,6 @@
   {{player}}
 </li>
 </ul>
+<div (click)="invite()" class='link' *ngIf="players.length<2">Invite friend</div>
 <p>{{status}}</p>
 </div>

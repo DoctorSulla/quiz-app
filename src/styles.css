@@ -14,6 +14,19 @@ input { background-color:#F9F7F7; border:1px solid black }
 button { color:var(--text-colour); background-color:var(--button-bg-colour); border-radius:5px; }
 form { padding:10px 0}
 
+.noSelect {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.noSelect:focus {
+    outline: none !important;
+}
+
 :root {
   --main-bg-colour : #F9F7F7;
   --top-bg-colour :  #3F72AF;

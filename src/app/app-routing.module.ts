@@ -10,6 +10,7 @@ import { CreateCategoryComponent } from './create-category/create-category.compo
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'home', component: HomeComponent },
+  { path: 'join/:gameId', component: HomeComponent },
   { path: 'game/:gameId', component: GameHubComponent },
   { path: 'lobby/:gameId', component: LobbyComponent },
   { path: 'new-category', component: CreateCategoryComponent },

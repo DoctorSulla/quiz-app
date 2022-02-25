@@ -2,7 +2,7 @@ label { display:none }
 button { margin:0 5px }
 input { display:block; margin:10px 5px }
 h3 { margin-left:5px; margin-top:10px}
-#credentials-container { width:60%; background-color:white; padding-top:0; margin:auto; min-height:300px; border-radius:10px; border:1px solid black }
+#credentials-container { width:90%; max-width:500px; background-color:white; padding-top:0; margin:auto; min-height:300px; border-radius:10px; border:1px solid black }
 .tab {
   color:#000000;
   background-color:#DBE2EF;

@@ -6,6 +6,7 @@ import { FetchGameRequest } from './interfaces/fetch-game-request';
 import { AnswerQuestionRequest } from './interfaces/answer-question-request';
 import { LoginRequest } from './interfaces/login-request';
 import { RegistrationRequest } from './interfaces/registration-request';
+import { JwtValidationRequest } from './interfaces/jwt-validation-request';
 
 
 @Injectable({
@@ -19,6 +20,10 @@ export class DataService {
   gameApi: string = this.baseApiUrl + '/game/';
   sessionApi: string = this.baseApiUrl + '/session/';
   registrationApi: string = this.baseApiUrl + '/registration/';
+  verificationApi: string = this.baseApiUrl + '/session/verify/';
+
+  jwt: string;
+  headers: HeadersInit
 
   // Login / registration related API calls
 
@@ -50,19 +55,23 @@ export class DataService {
     return p2;
   }
 
-
   // Game related API calls
 
   async getGame(gameObject: FetchGameRequest) {
-    let url = this.gameApi + "?player=" + gameObject.player + "&gameId=" + gameObject.gameId + "&retrieveQuestions=" + gameObject.retrieveQuestions;
-    let p1 = await fetch(url);
+    this.updateJwt();
+    let url = this.gameApi + "?gameId=" + gameObject.gameId + "&retrieveQuestions=" + gameObject.retrieveQuestions;
+    let p1 = await fetch(url,{
+      headers: this.headers
+    });
     let p2 = await p1.json();
     return p2;
   }
 
   async createGame(gameObject: NewGameRequest) {
+    this.updateJwt();
     let p1 = await fetch(this.gameApi,{
       method: 'POST',
+      headers: this.headers,
       body: JSON.stringify(gameObject)
     });
 
@@ -71,10 +80,11 @@ export class DataService {
   }
 
   async joinGame(gameObject: JoinGameRequest) {
+    this.updateJwt();
     let p1 = await fetch(this.gameApi,{
       method: 'PATCH',
-      body: JSON.stringify(gameObject),
-      headers:{ 'Content-Type': 'application/json'}
+      headers: this.headers,
+      body: JSON.stringify(gameObject)
     });
 
     let p2 = await p1.json();
@@ -82,17 +92,23 @@ export class DataService {
   }
 
   async answerQuestion(gameObject: AnswerQuestionRequest) {
+    this.updateJwt();
     let p1 = await fetch(this.gameApi,{
       method: 'PATCH',
-      body: JSON.stringify(gameObject),
-      headers:{ 'Content-Type': 'application/json'}
+      headers: this.headers,
+      body: JSON.stringify(gameObject)
     });
 
     let p2 = await p1.json();
     return p2;
   }
 
+  // Auth related methods
+
   readToken() {
+    if(localStorage.getItem('jwt') == null) {
+      return false;
+    }
     let parts : Array<string> = localStorage.getItem('jwt').split('.');
     let encodedPayload : string = parts[1];
     let payload : string = atob(encodedPayload);
@@ -100,5 +116,37 @@ export class DataService {
     return user;
   }
 
-  constructor() { }
+  async validateToken() {
+    this.updateJwt();
+    if(this.jwt == null) {
+      return false;
+    }
+    let jwtValidationRequest: JwtValidationRequest = {"jwt":this.jwt};
+    let p1 = await fetch(this.verificationApi,{
+      method: 'POST',
+      headers: this.headers,
+      body: JSON.stringify(jwtValidationRequest)
+    });
+    console.log(p1.status);
+    if(p1.status != 200) {
+      return false;
+    }
+
+    let p2 = await p1.json();
+    if(p2.error) {
+      return false;
+    }
+    return true;
+  }
+
+  updateJwt() {
+    this.jwt = localStorage.getItem('jwt');
+    this.headers = {
+        'jwt' : this.jwt,
+        'Content-Type': 'application/json'
+      };
+  }
+
+  constructor() {
+ }
 }

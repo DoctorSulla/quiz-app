@@ -58,7 +58,7 @@ export class LoginComponent implements OnInit {
     }
     else {
       this.formError = "";
-      setTimeout(()=> { if(this.pageState == 'Login') { this.pageState = 'Register'; } else { this.pageState = 'Login' }},600)
+      setTimeout(()=> { if(this.pageState == 'Login') { this.pageState = 'Register'; } else { this.pageState = 'Login' }},400)
     }
   }
 

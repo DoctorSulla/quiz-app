@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from '../data.service';
 import { NewGameRequest } from '../interfaces/new-game-request';
 import { JoinGameRequest } from '../interfaces/join-game-request';
@@ -11,11 +11,13 @@ import { JoinGameRequest } from '../interfaces/join-game-request';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private router: Router,private dataService: DataService) { }
+  constructor(private router: Router,private dataService: DataService,private route:ActivatedRoute) { }
 
   categories: Array<string> = [];
   username: string = this.dataService.readToken().username;
-  gameId: string = "";
+  gameId: string;
+  joinId: string;
+  private sub: any;
   joinError = "";
 
   validate() {
@@ -25,14 +27,14 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  async startGame(category:string,username:string) {
-      let request : NewGameRequest = {"playerOne":username,"category":category};
+  async startGame(category:string) {
+      let request : NewGameRequest = {"category":category};
       let response = await this.dataService.createGame(request);
       this.router.navigate(['/lobby',response.id]);
   }
 
-  async joinGame() {
-    let request : JoinGameRequest = {"player":this.username,"action":"JOIN","gameId":this.gameId};
+  async joinGame(gameId: string) {
+    let request : JoinGameRequest = {"action":"JOIN","gameId":gameId};
     let response = await this.dataService.joinGame(request);
     if(response.hasOwnProperty('error')) {
       this.joinError = response.message;
@@ -44,11 +46,19 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(localStorage.getItem('jwt') == null) {
-      this.router.navigate(['/login']);
-    }
-    localStorage.removeItem('activeGame');
+    this.dataService.validateToken().then(response => {
+      if(!response) {
+        this.router.navigate(['/login']);
+      }
+    })
     this.dataService.getCategories().then(response => { this.categories = response.categories});
+    // Get the game ID from the route parameter
+    this.sub = this.route.params.subscribe(params => {
+    this.joinId = params['gameId'];
+    if(typeof this.joinId != 'undefined') {
+      this.joinGame(this.joinId);
+    }
+  })
   }
 
 }
