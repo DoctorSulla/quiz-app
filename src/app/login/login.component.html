@@ -8,7 +8,7 @@
 
     <div [@switchForms]="activeTab ? 'visible' : 'invisible'" (@switchForms.start)="toggleForms($event)" id='form-container'>
         <form *ngIf="pageState == 'Login'" (submit)="processLogin(login)">
-        <label for='username'>Email:</label> <input  autocomplete='username' placeholder='Username' type='text' name='username' id='username' [(ngModel)]='login.email'>
+        <label for='username'>Email:</label> <input  autocomplete='email' placeholder='Email' type='text' name='username' id='username' [(ngModel)]='login.email'>
         <label for='password'>Password:</label> <input  autocomplete='current-password'  placeholder='Password' type='password' name='password' id='password' [(ngModel)]='login.password'>
         <button type='submit'>Login</button>
       </form>

@@ -11,6 +11,7 @@ import { GameHubComponent } from './game-hub/game-hub.component';
 import { LobbyComponent } from './lobby/lobby.component';
 import { CreateCategoryComponent } from './create-category/create-category.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
+import { DecodeHtmlEntitiesPipe } from './pipes/decode-html-entities.pipe';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { VerifyEmailComponent } from './verify-email/verify-email.component';
     GameHubComponent,
     LobbyComponent,
     CreateCategoryComponent,
-    VerifyEmailComponent
+    VerifyEmailComponent,
+    DecodeHtmlEntitiesPipe
   ],
   imports: [
     BrowserModule,

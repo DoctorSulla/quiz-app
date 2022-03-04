@@ -4,6 +4,7 @@ import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { GameHubComponent } from './game-hub/game-hub.component';
 import { LobbyComponent } from './lobby/lobby.component';
+import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { CreateCategoryComponent } from './create-category/create-category.component';
 
 
@@ -13,6 +14,8 @@ const routes: Routes = [
   { path: 'join/:gameId', component: HomeComponent },
   { path: 'game/:gameId', component: GameHubComponent },
   { path: 'lobby/:gameId', component: LobbyComponent },
+  { path: 'verify', component: VerifyEmailComponent },
+  { path: 'verify/:verificationCode', component: VerifyEmailComponent },
   { path: 'new-category', component: CreateCategoryComponent },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: '**', redirectTo: '/login', pathMatch: 'full' }

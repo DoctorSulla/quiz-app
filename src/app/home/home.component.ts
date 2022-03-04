@@ -20,6 +20,8 @@ export class HomeComponent implements OnInit {
   private sub: any;
   joinError = "";
 
+  randomString: string = "What is the scientific term for 'taste&#039;?";
+
   validate() {
     this.gameId = this.gameId.toUpperCase();
     if(this.gameId.length > 6) {

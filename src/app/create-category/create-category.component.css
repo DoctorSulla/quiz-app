@@ -1,1 +1,5 @@
-input { width:70% }
+input { display:block; width:70%; margin:5px 0 }
+button[type=submit], button[type=button] { margin-top:10px }
+.remove { cursor:pointer; color:red; font-style:italic }
+li.large, h3 { font-size:1.1em }
+.reverse { display:flex; flex-direction: column-reverse; }

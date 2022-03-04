@@ -23,7 +23,6 @@ export class GameHubComponent implements OnInit {
   gameFinished = false;
   correctAnswer: string;
 
-
   username: string = this.dataService.readToken().username;
   player: number;
   result: string;

@@ -7,6 +7,7 @@ import { AnswerQuestionRequest } from './interfaces/answer-question-request';
 import { LoginRequest } from './interfaces/login-request';
 import { RegistrationRequest } from './interfaces/registration-request';
 import { JwtValidationRequest } from './interfaces/jwt-validation-request';
+import { ValidateEmailRequest } from './interfaces/validate-email-request';
 
 
 @Injectable({
@@ -21,6 +22,7 @@ export class DataService {
   sessionApi: string = this.baseApiUrl + '/session/';
   registrationApi: string = this.baseApiUrl + '/registration/';
   verificationApi: string = this.baseApiUrl + '/session/verify/';
+  resendEmailApi: string = this.baseApiUrl + '/verificationEmail/';
 
   jwt: string;
   headers: HeadersInit
@@ -47,10 +49,48 @@ export class DataService {
     return p2;
   }
 
+  async validateEmail(validateEmailRequest:ValidateEmailRequest) {
+    this.updateJwt();
+    let p1 = await fetch(this.registrationApi,{
+      method: 'PATCH',
+      headers: this.headers,
+      body: JSON.stringify(validateEmailRequest)
+    });
+
+    let p2 = await p1.json();
+    return p2;
+  }
+
+  async newVerificationEmail() {
+    this.updateJwt();
+    let p1 = await fetch(this.resendEmailApi,{
+      method: 'POST',
+      headers: this.headers
+    });
+
+    let p2 = await p1.json();
+    return p2;
+  }
+
   // Reference data related API calls
 
   async getCategories() : Promise<CategoriesResponse> {
-    let p1 = await fetch(this.categoriesApi);
+    this.updateJwt();
+    let p1 = await fetch(this.categoriesApi,{
+      headers: this.headers,
+    });
+    let p2 = await p1.json();
+    return p2;
+  }
+
+  async createCategory(category:any) {
+    this.updateJwt();
+    let p1 = await fetch(this.categoriesApi,{
+      method: 'POST',
+      headers: this.headers,
+      body: JSON.stringify(category)
+    });
+
     let p2 = await p1.json();
     return p2;
   }
@@ -127,7 +167,6 @@ export class DataService {
       headers: this.headers,
       body: JSON.stringify(jwtValidationRequest)
     });
-    console.log(p1.status);
     if(p1.status != 200) {
       return false;
     }

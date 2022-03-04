@@ -1,1 +1,17 @@
-<p>verify-email works!</p>
+<section class='top'>
+  <h1>Verify Email</h1>
+</section>
+<section class='content'>
+<p>Please enter your verification code below:</p>
+<form (submit)='verifyEmail()'>
+  <input type='text' id='evc' name='evc' placeholder='Enter your verification code' [(ngModel)]='verificationCode'><br><br>
+  <button type='submit'>Verify Email</button>
+</form>
+<p *ngIf="pageState == 'initial'"><span class='link' (click)="resendEmail()">Click here</span> to resend your verification email.</p>
+<p *ngIf="pageState == 'mailSent'">{{formSuccess}}</p>
+<div class='form-error'>
+  {{formError}}
+</div>
+</section>
+<section class='bottom'>
+</section>

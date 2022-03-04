@@ -3,14 +3,39 @@
 </div>
 <div class='content'>
   <form (submit)='addQuestion()'>
-    <input type='text' id='category' name='category' placeholder='Category' [(ngModel)]='category.category'><br><br>
-    <input type='text' id='question' name='question' placeholder='Question' [(ngModel)]='question.question'><br><br>
-    <input type='text' id='correct-answer' name='correct-answer' placeholder='Correct Answer' [(ngModel)]='question.correctAnswer'><br>
-    <input type='text' id='other-answer-one' name='other-answer-one' placeholder='Other Answer' [(ngModel)]='question.otherAnswers[0]'><br>
-    <input type='text' id='other-answer-two' name='other-answer-two' placeholder='Other Answer' [(ngModel)]='question.otherAnswers[1]'><br>
-    <input type='text' id='other-answer-three' name='other-answer-three' placeholder='Other Answer' [(ngModel)]='question.otherAnswers[2]'><br><br>
-    <button type='submit'>Add Question</button>
+    <ng-container *ngIf="pageState == 'ChooseCategory'">
+    <fieldset>
+      <legend>Category</legend>
+    <input type='text' id='category' name='category' placeholder='Category' [(ngModel)]='category.category'>
+    </fieldset>
+    <button (click)="changePageState('AddQuestions')" type='button'>Confirm Category Name</button>
+    </ng-container>
+    <ng-container *ngIf="pageState == 'AddQuestions'">
+    <fieldset>
+      <legend>Question and Answers</legend>
+    <input type='text' id='question' name='question' placeholder='Question' [(ngModel)]='question.question'>
+    <input type='text' id='correct-answer' name='correct-answer' placeholder='Correct Answer' [(ngModel)]='question.correctAnswer'>
+    <input type='text' id='other-answer-one' name='other-answer-one' placeholder='Other Answer' [(ngModel)]='question.otherAnswers[0]'>
+    <input type='text' id='other-answer-two' name='other-answer-two' placeholder='Other Answer' [(ngModel)]='question.otherAnswers[1]'>
+    <input type='text' id='other-answer-three' name='other-answer-three' placeholder='Other Answer' [(ngModel)]='question.otherAnswers[2]'>
+    </fieldset>
+    <button *ngIf="pageState == 'AddQuestions'" type='submit'>Add Question</button>
+    </ng-container>
   </form>
 
-  {{category | json}}
+  <h2>{{category.category}} <ng-container *ngIf="pageState == 'AddQuestions'"> - </ng-container> <span class='remove' (click)="changePageState('ChooseCategory')" *ngIf="pageState == 'AddQuestions'">Change Category Name</span></h2>
+  <button (click)="createCategory()" *ngIf="category.questions.length >= 10" type='button'>Create Category</button>
+  <div class='notice' *ngIf="category.questions.length < 10 && pageState == 'AddQuestions'">A category must have at least 10 questions to submit. Poor quality categories may be subject to deletion.</div>
+  <div class='response'>{{response}}<ng-container *ngIf="pageState == 'CategoryCreated'"> <a routerLink="/home">Home</a>.</ng-container></div>
+  <ol class='reverse'>
+  <li class='large' *ngFor="let question of category.questions; index as i">
+    <h3>{{question.question}} - <span (click)="remove(i)" class='remove'>Remove</span>    </h3>
+    <ol type='a'>
+    <li>{{question.correctAnswer}}</li>
+    <li>{{question.otherAnswers[1]}}</li>
+    <li>{{question.otherAnswers[0]}}</li>
+    <li>{{question.otherAnswers[2]}}</li>
+    </ol>
+  </li>
+  </ol>
 </div>
