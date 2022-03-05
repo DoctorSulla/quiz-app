@@ -3,11 +3,17 @@
 </section>
 <section class='content'>
 <h2>Categories:</h2>
-<ul>
-<li class='category' *ngFor='let category of categories' (click)="startGame(category,username)">
-  {{category}}
-</li>
-</ul>
+<div id='categories'>
+  <ng-container  *ngFor="let category of categories">
+    <div class='category' (click)="startGame(category) ">
+      <fa-icon [icon]="faIcons[category.icon]"></fa-icon><br>
+    <span class='label'>{{category.name}}</span>
+    </div>
+  </ng-container>
+</div>
+<div>
+<a class='new-category' [routerLink]="['/new-category']">Create a new category</a>
+</div>
 <h2>Join a Game:</h2>
 <form (submit)='joinGame(gameId)'>
   <input (keyup)='validate()' type='text' name='game-id' id='game-id' pattern="[A-Z0-9]{6}" placeholder='Game ID' required [(ngModel)]='gameId'> <button type='submit'>Join Game</button>
