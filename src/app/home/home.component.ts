@@ -3,7 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from '../data.service';
 import { NewGameRequest } from '../interfaces/new-game-request';
 import { JoinGameRequest } from '../interfaces/join-game-request';
-import { faAtom, faCat, faTv, faQuestion, faEarthEurope, faCar, faCalculator, faDesktop, faLandmark, faPersonWalking, faFootball, faTrophy, faMasksTheater, faMusic, faBook, faGamepad, faTree, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { CategoriesResponse } from '../interfaces/categories-response';
+import { faAtom, faCat, faTv, faQuestion, faEarthEurope, faCar, faCalculator, faDesktop, faLandmark, faPersonWalking, faFootball, faTrophy, faMasksTheater, faMusic, faBook, faGamepad, faTree, faVideo, faPlus, faCirclePlus, faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 
 
 @Component({
@@ -40,22 +41,11 @@ export class HomeComponent implements OnInit {
     "faBook":faBook,
     "faGamepad": faGamepad,
     "faTree": faTree,
-    "faVideo": faVideo
+    "faVideo": faVideo,
+    "faPlus": faPlus,
+    "faCirclePlus": faCirclePlus,
+    "faArrowsRotate": faArrowsRotate
   };
-
-  faAtom = faAtom;
-  faCat = faCat;
-  faTv = faTv;
-  faQuestion = faQuestion;
-  faEarthEurope = faEarthEurope;
-  faCar = faCar;
-  faCalculator = faCalculator;
-  faDesktop = faDesktop;
-  faLandmark = faLandmark;
-  faPersonWalking = faPersonWalking;
-  faFootball = faFootball;
-  faTrophy = faTrophy;
-
 
   validate() {
     this.gameId = this.gameId.toUpperCase();
@@ -82,13 +72,29 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  async getCategories() {
+    let response : CategoriesResponse = await this.dataService.getCategories();
+    this.categories = response.categories.sort((a,b) => { return a.name.localeCompare(b.name) })
+    this.cacheCategories(response);
+  }
+
+  cacheCategories(categoriesResponse: CategoriesResponse) {
+    localStorage.setItem('categories-cache',JSON.stringify(categoriesResponse.categories));
+    localStorage.setItem('categories-cache-expiry',String(Date.now()+(12*3600*1000)));
+  }
+
   ngOnInit(): void {
     this.dataService.validateToken().then(response => {
       if(!response) {
         this.router.navigate(['/login']);
       }
     })
-    this.dataService.getCategories().then(response => { this.categories = response.categories.sort()});
+    if(localStorage.getItem('categories-cache') && localStorage.getItem('categories-cache') && Date.now() < parseInt(localStorage.getItem('categories-cache-expiry'))) {
+      this.categories = JSON.parse(localStorage.getItem('categories-cache'));
+    }
+    else {
+      this.getCategories();
+    }
     // Get the game ID from the route parameter
     this.sub = this.route.params.subscribe(params => {
     this.joinId = params['gameId'];

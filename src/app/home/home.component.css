@@ -1,7 +1,12 @@
 #categories { display:flex; flex-wrap: wrap; justify-content: center}
-.category { cursor:pointer; width:10%; min-width:100px; margin:10px; padding:5px; height:fit-content; text-align: center; }
+.category { cursor:pointer; width:10%; min-width:100px; margin:10px; padding:5px; height:4em; text-align: center; border:1px solid black; display:flex; justify-content:space-evenly; align-items: center; flex-direction:column; border-radius:10px }
+.category:nth-child(3n + 1) fa-icon { color: #FF0000	 }
+.category:nth-child(3n + 2) fa-icon { color: green	 }
+.category:nth-child(3n + 3) fa-icon { color:#0000FF	}
 ul { padding-left:15px }
 button { margin-left:5px }
 form { padding:10px 0}
-.label { font-size:0.8em}
-.new-category { display:block; text-align: center; padding:10px 0; color:blue }
+.category-icon { display:block }
+.label { font-size:0.8em; display:block; font-weight:bold }
+.new-category { display:block; text-align: center; padding:10px 0; color:blue; text-decoration:none; color:black }
+.refresh { cursor:pointer }

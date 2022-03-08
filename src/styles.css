@@ -4,7 +4,7 @@ main { width:100%; max-width:1000px; margin:auto; font-family:arial; background-
 h1,h2,h3,h4,h5,h6 { margin:0; padding:0;}
 h1 { color:white; font-size:24px }
 h2 { color:black; font-size:20px }
-li, input, button { font-size:16px}
+li, input, button, select, option { font-size:16px}
 
 
 .top { background-color: var(--top-bg-colour); padding:10px}

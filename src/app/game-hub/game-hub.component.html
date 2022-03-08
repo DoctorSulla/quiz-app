@@ -5,10 +5,10 @@
 <div *ngIf='player==2' class='scores'>{{localGameState.players[1]}} <span class='p1-score'>{{localGameState.scores[1]}}</span> vs <span class='p2-score'>{{localGameState.scores[0]}}</span> {{localGameState.players[0]}}</div>
 
 <h3>{{localGameState.activeQuestion+1}}. {{localGameState.question | decodeHtmlEntities}}</h3>
-<div class='options'>
-  <ng-container *ngFor="let answer of localGameState.answers"><div (click)="answerQuestion('ANSWER',gameId,answer,$event)" [ngClass]="{'correct': answer == correctAnswer }" class='option noSelect'>{{answer}}</div></ng-container>
+<div @fadeIn *ngIf="showAnswers" class='options'>
+  <ng-container *ngFor="let answer of localGameState.answers"><div (click)="answerQuestion('ANSWER',gameId,answer,$event)" [ngClass]="{'correct': answer == correctAnswer }" class='option noSelect'>{{answer | decodeHtmlEntities}}</div></ng-container>
 </div>
-<progress id="file" max="{{maxTime}}" value="{{elapsedTime}}"></progress>
+<progress @fadeIn *ngIf="showAnswers" id="file" max="{{maxTime}}" value="{{elapsedTime}}"></progress>
 </div>
 </div>
 <div *ngIf="gameFinished">

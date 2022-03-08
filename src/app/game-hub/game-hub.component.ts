@@ -4,21 +4,28 @@ import { FetchGameRequest } from '../interfaces/fetch-game-request';
 import { AnswerQuestionRequest } from '../interfaces/answer-question-request';
 import { LocalGameState } from '../interfaces/local-game-state';
 import { ActivatedRoute, Router } from '@angular/router';
+import { QuestionFadeInAnimation } from '../animations/animations';
 
 @Component({
   selector: 'app-game-hub',
   templateUrl: './game-hub.component.html',
-  styleUrls: ['./game-hub.component.css']
+  styleUrls: ['./game-hub.component.css'],
+  animations: [QuestionFadeInAnimation]
 })
 export class GameHubComponent implements OnInit {
 
   constructor(private dataService:DataService,private route:ActivatedRoute,private router: Router) { }
+
+  // Variables to control client side timer
   elapsedTime:number = 0;
   maxTime: number = 1000;
   stepSize: number = 1;
-
   clientTimer: ReturnType<typeof setInterval>;
+  startTimerDelay: ReturnType<typeof setTimeout>;
+
+  // Interval for querying the game
   queryGame: ReturnType<typeof setInterval>;
+
   answeredCurrent: boolean = false;
   gameFinished = false;
   correctAnswer: string;
@@ -30,13 +37,16 @@ export class GameHubComponent implements OnInit {
   gameId: string;
   private sub: any;
 
+  // Controls whether the answers and the timer bar should be displayed
+  showAnswers: boolean = false;
+
   localGameState: LocalGameState = {"activeQuestion":0,"question":"","answers":[],"scores":[],"players":[]}
 
   async getGame(gameId: string,retrieveQuestions: string) {
     // Get the game
     let fetchGameRequest : FetchGameRequest = {"gameId":gameId,"retrieveQuestions":retrieveQuestions};
     let response = await this.dataService.getGame(fetchGameRequest);
-    // If the active question has increased the other player has answered
+    // If the active question has increased both players have answered
     if(response.activeQuestion > this.localGameState.activeQuestion) {
       clearInterval(this.queryGame);
       this.localGameState.activeQuestion = response.activeQuestion;
@@ -60,12 +70,15 @@ export class GameHubComponent implements OnInit {
 
     // If function is called trying to retrieve a question then update the game state and reset the timer
     if(retrieveQuestions == "true") {
-        this.localGameState.answers = response.answers;
         this.localGameState.question = response.question;
+        // Hide the answers
+        this.showAnswers = false;
+        this.localGameState.answers = response.answers;
         this.localGameState.activeQuestion = response.activeQuestion;
         this.answeredCurrent = false;
         this.elapsedTime = 0;
-        this.startTimer();
+        setTimeout(()=>{ this.showAnswers = true; },10);
+        this.startTimerDelay = setTimeout(()=>{ this.startTimer(); },2000);
       }
   }
 
@@ -90,6 +103,7 @@ export class GameHubComponent implements OnInit {
   }
 
   async answerQuestion(action:string,gameId:string,answer:string,$event) {
+    clearTimeout(this.startTimerDelay);
     if(this.answeredCurrent) {
       return false;
     }
@@ -123,6 +137,9 @@ export class GameHubComponent implements OnInit {
   }
 
   startTimer() {
+    // Remove any previous client timers
+    clearInterval(this.clientTimer);
+    // Set a new client timer
     this.clientTimer = setInterval(() => { this.increaseTime(); },10);
   }
 

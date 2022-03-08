@@ -1,3 +1,8 @@
+export interface category {
+  "name": string,
+  "icon": string
+}
+
 export interface CategoriesResponse {
-  categories: Array<string>
+  categories: Array<category>
 }

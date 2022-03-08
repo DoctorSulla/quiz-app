@@ -2,17 +2,17 @@
 <h1>Welcome {{username}}</h1>
 </section>
 <section class='content'>
-<h2>Categories:</h2>
-<div id='categories'>
+<h2>Categories: <fa-icon (click)='getCategories()' class='refresh noSelect' [icon]="faIcons['faArrowsRotate']"></fa-icon></h2>
+<div class='noSelect' id='categories'>
   <ng-container  *ngFor="let category of categories">
-    <div class='category' (click)="startGame(category) ">
-      <fa-icon [icon]="faIcons[category.icon]"></fa-icon><br>
-    <span class='label'>{{category.name}}</span>
+    <div class='category' (click)="startGame(category.name) ">
+      <fa-icon class='category-icon' [icon]="faIcons[category.icon]"></fa-icon>
+    <span class='label noSelect'>{{category.name}}</span>
     </div>
   </ng-container>
 </div>
 <div>
-<a class='new-category' [routerLink]="['/new-category']">Create a new category</a>
+<a class='new-category' [routerLink]="['/new-category']">Create a new category <fa-icon [icon]="faIcons['faCirclePlus']"></fa-icon></a>
 </div>
 <h2>Join a Game:</h2>
 <form (submit)='joinGame(gameId)'>

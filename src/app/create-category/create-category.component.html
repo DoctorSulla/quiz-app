@@ -5,10 +5,13 @@
   <form (submit)='addQuestion()'>
     <ng-container *ngIf="pageState == 'ChooseCategory'">
     <fieldset>
-      <legend>Category</legend>
+      <legend>Category & Icon</legend>
     <input type='text' id='category' name='category' placeholder='Category' [(ngModel)]='category.category'>
+    <select id='icon' name='icon' placeholder='Icon' [(ngModel)]='category.icon'>
+      <option *ngFor="let item of faIcons | keyvalue">{{item.key}} </option>
+    </select>
     </fieldset>
-    <button (click)="changePageState('AddQuestions')" type='button'>Confirm Category Name</button>
+    <button (click)="changePageState('AddQuestions')" type='button'>Confirm Category Name & Icon</button>
     </ng-container>
     <ng-container *ngIf="pageState == 'AddQuestions'">
     <fieldset>
@@ -23,13 +26,13 @@
     </ng-container>
   </form>
 
-  <h2>{{category.category}} <ng-container *ngIf="pageState == 'AddQuestions'"> - </ng-container> <span class='remove' (click)="changePageState('ChooseCategory')" *ngIf="pageState == 'AddQuestions'">Change Category Name</span></h2>
+  <h2>{{category.category}} <fa-icon [icon]="faIcons[category.icon]"></fa-icon><ng-container *ngIf="pageState == 'AddQuestions'"> - </ng-container> <span class='remove' (click)="changePageState('ChooseCategory')" *ngIf="pageState == 'AddQuestions'">Change Category Name / Icon</span></h2>
   <button (click)="createCategory()" *ngIf="category.questions.length >= 10" type='button'>Create Category</button>
   <div class='notice' *ngIf="category.questions.length < 10 && pageState == 'AddQuestions'">A category must have at least 10 questions to submit. Poor quality categories may be subject to deletion.</div>
   <div class='response'>{{response}}<ng-container *ngIf="pageState == 'CategoryCreated'"> <a routerLink="/home">Home</a>.</ng-container></div>
   <ol class='reverse'>
   <li class='large' *ngFor="let question of category.questions; index as i">
-    <h3>{{question.question}} - <span (click)="remove(i)" class='remove'>Remove</span>    </h3>
+    <h3>{{question.question}} - <span (click)="remove(i)" class='remove'>Remove</span></h3>
     <ol type='a'>
     <li>{{question.correctAnswer}}</li>
     <li>{{question.otherAnswers[1]}}</li>
