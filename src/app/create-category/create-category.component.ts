@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../data.service';
+import { IconsService } from '../icons.service';
 import { Router } from '@angular/router';
 import { FullCategory } from '../interfaces/full-category';
-import { faAtom, faCat, faTv, faQuestion, faEarthEurope, faCar, faCalculator, faDesktop, faLandmark, faPersonWalking, faFootball, faTrophy, faMasksTheater, faMusic, faBook, faGamepad, faTree, faVideo } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-create-category',
@@ -11,28 +11,9 @@ import { faAtom, faCat, faTv, faQuestion, faEarthEurope, faCar, faCalculator, fa
 })
 export class CreateCategoryComponent implements OnInit {
 
-  constructor(private dataService: DataService, private router:Router) { }
+  constructor(private dataService: DataService, private router:Router, private iconsService: IconsService) { }
 
-  faIcons = {
-    "faAtom":faAtom,
-    "faCat":faCat,
-    "faTv":faTv,
-    "faQuestion":faQuestion,
-    "faEarthEurope":faEarthEurope,
-    "faCar":faCar,
-    "faCalculator":faCalculator,
-    "faDesktop":faDesktop,
-    "faLandmark":faLandmark,
-    "faPersonWalking":faPersonWalking,
-    "faFootball":faFootball,
-    "faTrophy":faTrophy,
-    "faMasksTheater":faMasksTheater,
-    "faMusic":faMusic,
-    "faBook":faBook,
-    "faGamepad": faGamepad,
-    "faTree": faTree,
-    "faVideo": faVideo
-  };
+  faIcons = this.iconsService.faIcons;
 
   categoryRegExp = new RegExp("^[A-z0-9\-]{4,100}$","i");
   qAndARegExp = new RegExp("^[A-z0-9\?\' \-]{1,200}$","i");

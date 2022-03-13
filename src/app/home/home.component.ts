@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DataService } from '../data.service';
+import { IconsService } from '../icons.service';
 import { NewGameRequest } from '../interfaces/new-game-request';
 import { JoinGameRequest } from '../interfaces/join-game-request';
 import { CategoriesResponse } from '../interfaces/categories-response';
-import { faAtom, faCat, faTv, faQuestion, faEarthEurope, faCar, faCalculator, faDesktop, faLandmark, faPersonWalking, faFootball, faTrophy, faMasksTheater, faMusic, faBook, faGamepad, faTree, faVideo, faPlus, faCirclePlus, faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
-
 
 @Component({
   selector: 'app-home',
@@ -14,7 +13,7 @@ import { faAtom, faCat, faTv, faQuestion, faEarthEurope, faCar, faCalculator, fa
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private router: Router,private dataService: DataService,private route:ActivatedRoute) { }
+  constructor(private router: Router,private dataService: DataService,private route:ActivatedRoute, private iconsService: IconsService) { }
 
   categories: Array<any> = [];
   username: string = this.dataService.readToken().username;
@@ -23,29 +22,7 @@ export class HomeComponent implements OnInit {
   private sub: any;
   joinError = "";
 
-  faIcons = {
-    "faAtom":faAtom,
-    "faCat":faCat,
-    "faTv":faTv,
-    "faQuestion":faQuestion,
-    "faEarthEurope":faEarthEurope,
-    "faCar":faCar,
-    "faCalculator":faCalculator,
-    "faDesktop":faDesktop,
-    "faLandmark":faLandmark,
-    "faPersonWalking":faPersonWalking,
-    "faFootball":faFootball,
-    "faTrophy":faTrophy,
-    "faMasksTheater":faMasksTheater,
-    "faMusic":faMusic,
-    "faBook":faBook,
-    "faGamepad": faGamepad,
-    "faTree": faTree,
-    "faVideo": faVideo,
-    "faPlus": faPlus,
-    "faCirclePlus": faCirclePlus,
-    "faArrowsRotate": faArrowsRotate
-  };
+  faIcons = this.iconsService.faIcons;
 
   validate() {
     this.gameId = this.gameId.toUpperCase();
