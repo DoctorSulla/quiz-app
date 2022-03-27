@@ -13,6 +13,8 @@ import { LobbyComponent } from './lobby/lobby.component';
 import { CreateCategoryComponent } from './create-category/create-category.component';
 import { VerifyEmailComponent } from './verify-email/verify-email.component';
 import { DecodeHtmlEntitiesPipe } from './pipes/decode-html-entities.pipe';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,13 @@ import { DecodeHtmlEntitiesPipe } from './pipes/decode-html-entities.pipe';
     AppRoutingModule,
     FormsModule,
     BrowserAnimationsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    })
   ],
   providers: [],
   bootstrap: [AppComponent]
