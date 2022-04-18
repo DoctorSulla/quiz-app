@@ -63,9 +63,17 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(localStorage.getItem('jwt') != null) {
-      this.router.navigate(['/home']);
-    };
+    this.dataService.validateToken().then(response => {
+      if(!response) {
+        localStorage.removeItem('jwt');
+      }
+      else {
+        this.router.navigate(['/home']);
+      }
+    })
   }
 
 }
+
+
+

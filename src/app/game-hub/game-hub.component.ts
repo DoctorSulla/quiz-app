@@ -52,6 +52,7 @@ export class GameHubComponent implements OnInit {
       this.localGameState.activeQuestion = response.activeQuestion;
       // Store in case page is refreshed
       localStorage.setItem('activeQuestion',String(this.localGameState.activeQuestion));
+      this.correctAnswer = "";
       this.getGame(this.gameId,'true');
     }
     if(response.gameStatus == 'Finished') {

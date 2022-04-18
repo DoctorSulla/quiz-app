@@ -11,13 +11,16 @@
 <progress @fadeIn *ngIf="showAnswers" id="file" max="{{maxTime}}" value="{{elapsedTime}}"></progress>
 </div>
 </div>
+
 <div *ngIf="gameFinished">
 <div class='top'>
   <h1>{{result}}</h1>
 </div>
+
 <div class='content'>
 <div *ngIf='player==1' class='final-scores'>{{localGameState.players[0]}} <span class='p1-score'>{{localGameState.scores[0]}}</span> vs <span class='p2-score'>{{localGameState.scores[1]}}</span> {{localGameState.players[1]}}</div>
 
 <div *ngIf='player==2' class='final-scores'>{{localGameState.players[1]}} <span class='p1-score'>{{localGameState.scores[1]}}</span> vs <span class='p2-score'>{{localGameState.scores[0]}}</span> {{localGameState.players[0]}}</div>
 <a class='navigation' routerLink="/home">HOME</a>
+</div>
 </div>
